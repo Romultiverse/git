@@ -1,0 +1,76 @@
+{
+  "name": "ashare-fund-flow-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A股板块资金流向监测 —— 基于 Electron + ECharts 的桌面看板",
+  "main": "main.js",
+  "author": "AShare Fund Flow Dashboard",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder --win",
+    "build:nsis": "electron-builder --win nsis",
+    "build:portable": "electron-builder --win portable",
+    "probe": "node scripts/probe-api.js",
+    "test": "node --test tests/parse.test.js",
+    "smoke": "electron scripts/smoke-test.js",
+    "verify:build": "node scripts/verify-build.js",
+    "acceptance": "electron scripts/acceptance-test.js",
+    "icon": "python scripts/make-icon.py",
+    "diagnose": "node scripts/diagnose.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.ashare.fundflow.dashboard",
+    "productName": "AShareFundFlow",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "data/fetcher.js",
+      "data/cache.json",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "A股板块资金流向监测",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}
